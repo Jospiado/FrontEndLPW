@@ -1,0 +1,64 @@
+<nb-card>
+    <nb-card-header>
+      Cadastro de Fornecedor
+    </nb-card-header>  
+  
+    <nb-card-body>
+        <button style="margin-bottom: 1rem;" nbButton status="primary" (click)="openModalFornecedor(null)">Novo</button>   
+        <ng2-smart-table #ng2TbFornecedor 
+          [settings]="tbFornecedorConfig" 
+          [source]="tbFornecedorData" 
+          (edit)="openModalFornecedor($event)" 
+          (delete)="openModalExclusion($event)">          
+        </ng2-smart-table>
+    </nb-card-body>
+  </nb-card>
+  
+  
+  <ng-template #dialogFornecedor let-data let-ref="dialogRef">
+    <nb-card style="width: 25em">
+      <nb-card-header>Cadastro de Fornecedor ({{ findOperation() }})</nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="formFornecedor" autocomplete="off">
+          
+          <div class="form-group">
+            <label for="name">Nome *</label>
+            <input class="form-control" id="name" formControlName="name">
+          </div>  
+          
+          <div class="form-group">
+            <label for="cnpj">CNPJ *</label>
+            <input id="cnpj" class="form-control" formControlName="cnpj">
+          </div>
+
+          <div class="form-group">
+            <label for="email">E-mail *</label>
+            <input id="email" type="email" class="form-control" formControlName="email">
+          </div>
+
+          <div class="form-group" [hidden]="isAdd()">
+            <label for="creation">Data Criação</label>
+            <input id="creation" class="form-control" formControlName="creation" 
+              [value]="formFornecedor.get('creation').value | date:'dd/MM/yyyy HH:mm:ss'">
+          </div>
+        </form>
+      </nb-card-body>
+      <nb-card-footer>        
+        <button nbButton (click)="ref.close()">Cancelar</button>
+        <button class="btn-action-modal" nbButton status="primary" (click)="btnSave($event);">Salvar</button>
+      </nb-card-footer>
+    </nb-card>
+  </ng-template>
+  
+  <ng-template #dialogDelete let-data let-ref="dialogRef">
+    <nb-card>
+      <nb-card-header>Excluir Fornecedor</nb-card-header>
+      <nb-card-body>
+        Tem certeza que deseja excluir o fornecedor <span style="font-weight: bold">{{ data }}</span>?  
+      </nb-card-body>
+      <nb-card-footer>
+        <button nbButton (click)="ref.close()">Cancelar</button>
+        <button class="btn-action-modal" nbButton status="danger" (click)="btnDelete($event);">Excluir</button>
+      </nb-card-footer>
+    </nb-card>
+  </ng-template>
